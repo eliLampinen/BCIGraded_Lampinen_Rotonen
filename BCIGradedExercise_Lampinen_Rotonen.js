@@ -102,6 +102,17 @@ const loginAndRegisterSchema = {
 const Ajv = require("ajv")
 const ajv = new Ajv()
 
+var cloudinary = require('cloudinary');
+var cloudinaryStorage = require('multer-storage-cloudinary');
+
+var storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: '', // give cloudinary folder where you want to store images
+  allowedFormats: ['jpg', 'png'],
+});
+
+var parser = multer({ storage: storage });
+
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
@@ -137,6 +148,13 @@ passport.use(new BasicStrategy(
         }
     }
 ))
+
+app.post('/upload', parser.single('image'), function (req, res) {
+    console.log(req.file);
+    res.status(201);
+    res.json(req.file);
+});
+
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
