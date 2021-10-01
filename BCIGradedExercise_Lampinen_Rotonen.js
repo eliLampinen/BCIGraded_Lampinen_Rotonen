@@ -36,7 +36,7 @@ const allPosts = []
 
 const jwtSecretKey = "secretKey123"
 
-app.set('port', (process.env.port || 80));  
+app.set('port', (process.env.PORT || 80));  
 
 
 passport.use(new BasicStrategy(
