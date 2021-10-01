@@ -10,6 +10,7 @@ const upload = multer({dest: "uploads/"})
 const jwt = require("jsonwebtoken")
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
+const loginAndRegisterSchema = require("./loginAndRegister.schema.json")
 const loginAndRegisterSchema = {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
@@ -102,17 +103,6 @@ const loginAndRegisterSchema = {
 const Ajv = require("ajv")
 const ajv = new Ajv()
 
-var cloudinary = require("cloudinary")
-var cloudinaryStorage = require("multer-storage-cloudinary")
-
-var storage = cloudinaryStorage({
-    cloudinary: cloudinary,
-    folder: '',
-    allowedFormats: ["jpg","png"],
-})
-
-var parser = multer({storage: storage})
-
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
@@ -163,10 +153,25 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
-app.post('/posts', parser.single('photos'), function (req, res) {
+app.post('/posts', upload.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
-
+try {
+    res.send(req.files);
+    myList = []
+    for (let i = 0; i < 4; i ++)
+    {
+        try {
+            myList.push(req.files[i].path)
+        }
+        catch (error) {
+            
+        }
+    }
+} catch (error) {
+    console.log(error);
+    res.send(400);
+}
 const newPost = {
     title: req.body.title,
     itemDescription: req.body.itemDescription,
