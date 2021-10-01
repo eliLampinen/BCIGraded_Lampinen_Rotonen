@@ -176,7 +176,15 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
 app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
-console.log(req.file.url)
+console.log(req.file)
+
+try {
+    res.json(req.file.url)
+
+} catch (error) {
+    console.log("ERRORI");
+    res.send(400);
+}
 
 try {
     res.send(req.files);
@@ -195,7 +203,6 @@ try {
     res.send(400);
 }
 const newPost = {
-    url: req.file.url
     title: req.body.title,
     itemDescription: req.body.itemDescription,
     category: req.body.category,
