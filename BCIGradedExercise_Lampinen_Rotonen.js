@@ -109,7 +109,7 @@ var cloudinaryStorage = require("multer-storage-cloudinary")
 var storage = cloudinaryStorage({
     cloudinary: cloudinary,
     folder: '',
-    allowedFormats: ["jpg","png"]
+    allowedFormats: ["jpg","png"],
 })
 
 var parser = multer({storage: storage})
