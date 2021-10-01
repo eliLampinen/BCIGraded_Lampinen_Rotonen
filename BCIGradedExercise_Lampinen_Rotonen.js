@@ -149,11 +149,6 @@ passport.use(new BasicStrategy(
     }
 ))
 
-app.post('/upload', parser.single('image'), function (req, res) {
-    console.log(req.file);
-    res.status(201);
-    res.json(req.file);
-});
 
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
