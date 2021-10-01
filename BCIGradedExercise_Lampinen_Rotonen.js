@@ -14,7 +14,6 @@ const loginAndRegisterSchema = require("./schemas/loginAndRegister.schema.json")
 const Ajv = require("ajv")
 const ajv = new Ajv()
 
-print("ASD")
 app.use(bodyParser.json())
 
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
