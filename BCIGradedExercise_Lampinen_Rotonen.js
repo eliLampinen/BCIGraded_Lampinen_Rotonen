@@ -11,6 +11,7 @@ const upload = multer({dest: "uploads/"})
 const jwt = require("jsonwebtoken")
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
+const loginAndRegisterSchema = require("./loginAndRegister.schema.json")
 const loginAndRegisterSchema = {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
@@ -104,20 +105,20 @@ const Ajv = require("ajv")
 const ajv = new Ajv()
 
 var cloudinary = require("cloudinary")
-var cloudinaryStorage = require("multer-storage-cloudinary")
+var { cloudinaryStorage } = require("multer-storage-cloudinary")
 
-var storage = cloudinaryStorage({
+var storage = new cloudinaryStorage({
     cloudinary: cloudinary,
+    params: {
     folder: '',
-    allowedFormats: ["jpg","png"],
+    format: async (req,file) => 'png'
+    }
 })
 
 var parser = multer({storage: storage})
 
 app.use(bodyParser.json())
-
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
-
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     const result = loginAndRegisterInfoValidator(req.body)
     if (result == true){
@@ -126,22 +127,14 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     else{
         res.sendStatus(400)
     }
-
 }
-
 const userDB = []
 const allPosts = []
-
-
 const jwtSecretKey = "secretKey123"
-
 app.set('port', (process.env.PORT || 80));  
-
-
 passport.use(new BasicStrategy(
     (userName, passWord, done) => {
         console.log('Basic strategy params, username ' + userName + " , password " + passWord)
-
         // credential check
         // search userDB for matching user
         const searchResult = userDB.find(user => {
@@ -159,13 +152,9 @@ passport.use(new BasicStrategy(
         }
     }
 ))
-
-
-
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
-
     const newUser = {
         userName : req.body.userName,
         passWord : hashedPassword, // DO NOT EVER STORE PASSWORD TO THE SYSTEM IN PLAIN TEXT
@@ -173,13 +162,11 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
         lastName : req.body.lastName,
         birthDate : req.body.birthDate,
         email : req.body.email
-
     }
     console.log(newUser)
     userDB.push(newUser)
     res.sendStatus(201) 
 })
-
 app.post('/posts', parser.single('photos'), function (req, res) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
@@ -198,38 +185,26 @@ const newPost = {
     sellersInfoEmail : req.body.sellersInfoEmail,
     sellersInfoPhone : req.body.sellersInfoPhone
     }
-
 console.log(newPost)
 console.log(myList)
-
 allPosts.push(newPost)
-
 }
 )
-
-
 var opts = {
     jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey : jwtSecretKey
 }
-
 app.post('/login', loginAndRegisterInfoValidatorMW,  passport.authenticate('basic', {session: false}), (req, res) => {
     const token = jwt.sign({foo: "bar"}, jwtSecretKey)
     res.json({token: token})
     
 })
-
-
-
 passport.use(new JwtStrategy(opts, (payload, done) => {
     done(null, {})
 }))
-
-
 app.get("/jwtprotectedresource", passport.authenticate('jwt', {session: false}), (req, res) => {
     res.send("INSIDE JWT PROTECTED")
 })
-
 app.get('/posts', (req, res) => {
     cityList = []
     categoryList = []
@@ -239,20 +214,16 @@ app.get('/posts', (req, res) => {
     let categoryQ = req.query.category
     let timeQ = req.query.dateOfPosting
     console.log("ASDASD" + timeQ)
-
     console.log(locationQ)
     console.log(categoryQ)
-
     if (categoryQ == undefined && locationQ != undefined)
     {
-
     allPosts.forEach(function(i){
         if (i.location == locationQ)
         {
             cityList.push(i)
         }
       });
-
     if (cityList.length == 0)
     {
         res.sendStatus(404)
@@ -263,8 +234,6 @@ app.get('/posts', (req, res) => {
         res.send(cityList)
     }   
     }
-
-
     else if (locationQ == undefined && categoryQ != undefined)
     {
         allPosts.forEach(function(i){
@@ -284,7 +253,6 @@ app.get('/posts', (req, res) => {
             res.send(categoryList)
         }  
     }
-
     else if (locationQ == undefined && categoryQ == undefined)
     {
         allPosts.forEach(function(i){
@@ -304,17 +272,11 @@ app.get('/posts', (req, res) => {
             res.send(timeList)
         }  
     }
-
     else 
     {
         res.sendStatus(400)
     }
-
   })
-
-
-
-
 app.listen(app.get('port'), function() {
     console.log('Example app listening at http://localhost')
   })
