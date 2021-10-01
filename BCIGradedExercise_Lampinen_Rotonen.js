@@ -103,6 +103,17 @@ const loginAndRegisterSchema = {
 const Ajv = require("ajv")
 const ajv = new Ajv()
 
+var cloudinary = require("cloudinary")
+var cloudinaryStorage = require("multer-storage-cloudinary")
+
+var storage = cloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: '',
+    allowedFormats: ["jpg","png"]
+})
+
+var parser = multer({storage: storage})
+
 app.use(bodyParser.json())
 
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
@@ -172,6 +183,7 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
 app.post('/posts', upload.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
+console.log(req.file)
 try {
     res.send(req.files);
     myList = []
