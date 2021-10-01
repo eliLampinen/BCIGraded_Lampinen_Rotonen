@@ -178,13 +178,6 @@ app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.body will contain the text fields, if there were any
 console.log(req.file)
 
-try {
-    res.json(req.file.url)
-
-} catch (error) {
-    console.log("ERRORI");
-    res.send(400);
-}
 
 try {
     res.send(req.files);
