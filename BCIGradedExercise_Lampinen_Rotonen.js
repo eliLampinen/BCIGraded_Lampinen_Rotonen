@@ -180,28 +180,11 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     res.sendStatus(201) 
 })
 
-app.post('/posts', parser.single('photos'), function (req, res, next) {
+app.post('/posts', parser.single('photos'), function (req, res) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
-try {
-    res.send(req.files);
-    myList = []
-    for (let i = 0; i < 4; i ++)
-    {
-        try {
-            myList.push(req.files[i].path)
-        }
-        catch (error) {
-            
-        }
-    }
 
-
-} catch (error) {
-    console.log(error);
-    res.send(400);
-}
 const newPost = {
     title: req.body.title,
     itemDescription: req.body.itemDescription,
