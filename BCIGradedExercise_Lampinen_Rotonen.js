@@ -10,7 +10,6 @@ const upload = multer({dest: "uploads/"})
 const jwt = require("jsonwebtoken")
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
-const loginAndRegisterSchema = require("./loginAndRegister.schema.json")
 const loginAndRegisterSchema = {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
