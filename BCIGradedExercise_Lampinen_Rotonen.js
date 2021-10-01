@@ -36,7 +36,7 @@ const allPosts = []
 
 const jwtSecretKey = "secretKey123"
 
-app.set("port", (process.env.port || 80))
+app.set('port', (process.env.port || 80));  
 
 
 passport.use(new BasicStrategy(
@@ -232,6 +232,6 @@ app.get('/posts', (req, res) => {
 
 
 
-app.listen(app.get('port'), () => {
+app.listen(app.get('port'), function() => {
     console.log(`Example app listening at http://localhost `, app.get('port'))
   })
