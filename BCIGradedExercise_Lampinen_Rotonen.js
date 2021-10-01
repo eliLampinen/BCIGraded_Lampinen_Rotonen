@@ -102,16 +102,7 @@ const loginAndRegisterSchema = {
 const Ajv = require("ajv")
 const ajv = new Ajv()
 
-var cloudinary = require('cloudinary');
-var cloudinaryStorage = require('multer-storage-cloudinary');
 
-var storage = cloudinaryStorage({
-  cloudinary: cloudinary,
-  folder: '', // give cloudinary folder where you want to store images
-  allowedFormats: ['jpg', 'png'],
-});
-
-var parser = multer({ storage: storage });
 
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
