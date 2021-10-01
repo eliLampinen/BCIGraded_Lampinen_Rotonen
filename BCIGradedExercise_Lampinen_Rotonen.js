@@ -177,7 +177,6 @@ app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
-res.json(req.file)
 
 try {
     res.send(req.files);
@@ -211,6 +210,8 @@ const newPost = {
 console.log(newPost)
 console.log(myList)
 allPosts.push(newPost)
+res.json(req.file)
+
 }
 )
 var opts = {
