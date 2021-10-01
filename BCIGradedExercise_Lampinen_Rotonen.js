@@ -232,6 +232,6 @@ app.get('/posts', (req, res) => {
 
 
 
-app.listen(app.get('port'), function() => {
-    console.log(`Example app listening at http://localhost `, app.get('port'))
+app.listen(app.get('port'), function() {
+    console.log('Example app listening at http://localhost')
   })
