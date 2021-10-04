@@ -195,7 +195,7 @@ const newPost = {
     sellersInfoFirstName : req.body.sellersInfoFirstName,
     sellersInfoLastName : req.body.sellersInfoLastName,
     sellersInfoEmail : req.body.sellersInfoEmail,
-    sellersInfoPhone : req.body.sellersInfoPhone
+    sellersInfoPhone : req.body.sellersInfoPhone,
     picsPaths : myList
     }
 allPosts.push(newPost)
