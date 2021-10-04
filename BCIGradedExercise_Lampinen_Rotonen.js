@@ -36,17 +36,6 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     }
 }
 
-const postInfoValidatorMW = function(req, res, next ) {
-    const result = postInfoValidator(req.body)
-    if (result == true){
-        next()
-    }
-    else{
-        res.sendStatus(400)
-    }
-}
-
-
 const userDB = []
 const allPosts = []
 const jwtSecretKey = "secretKey123"
@@ -91,7 +80,7 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
-app.post('/posts', postInfoValidatorMW, parser.array('photos', 4), (req, res, next) => {
+app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
