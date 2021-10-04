@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken")
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
 const loginAndRegisterSchema = require("./schemas/loginAndRegisterSchema")
+const postSchema = require("./schemas/postsSchema")
 const Ajv = require("ajv")
 const ajv = new Ajv()
 var cloudinary = require("cloudinary")
@@ -23,6 +24,8 @@ var storage = cloudinaryStorage({
 var parser = multer({storage: storage})
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
+const postInfoValidator = ajv.compile(postSchema)
+
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     const result = loginAndRegisterInfoValidator(req.body)
     if (result == true){
@@ -32,6 +35,18 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
         res.sendStatus(400)
     }
 }
+
+const postInfoValidatorMW = function(req, res, next ) {
+    const result = postSchema(req.body)
+    if (result == true){
+        next()
+    }
+    else{
+        res.sendStatus(400)
+    }
+}
+
+
 const userDB = []
 const allPosts = []
 const jwtSecretKey = "secretKey123"
@@ -76,7 +91,7 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
-app.post('/posts', parser.array('photos', 4), function (req, res, next) {
+app.post('/posts', postInfoValidatorMW, parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
