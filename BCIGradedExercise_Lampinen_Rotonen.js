@@ -211,7 +211,6 @@ const newPost = {
 console.log(newPost)
 console.log(myList)
 allPosts.push(newPost)
-res.json(req.file.fieldname)
 
 }
 )
