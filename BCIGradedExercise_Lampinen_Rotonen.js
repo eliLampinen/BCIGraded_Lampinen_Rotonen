@@ -34,6 +34,8 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     }
 }
 
+
+
 const userDB = []
 const allPosts = []
 const jwtSecretKey = "secretKey123"
@@ -58,7 +60,11 @@ passport.use(new BasicStrategy(
         }
     }
 ))
-
+app.post('/upload', parser.single('image'), function (req, res) {
+    console.log(req.file);
+    res.status(201);
+    res.json(req.file);
+});
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
@@ -74,12 +80,11 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
-
+app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
-
 try {
     myList = []
     for (let i = 0; i < 4; i ++)
@@ -88,7 +93,6 @@ try {
             myList.push(req.files[i].url)
         }
         catch (error) {
-
         }
     }
 } catch (error) {
@@ -111,8 +115,6 @@ const newPost = {
     }
 allPosts.push(newPost)
 res.send(req.body)
-
-
 }
 )
 var opts = {
@@ -157,7 +159,6 @@ app.get('/posts', (req, res) => {
     
     {
          res.type('json').send(JSON.stringify(cityList, null, 2) + '\n');
-
     }   
     }
     else if (locationQ == undefined && categoryQ != undefined)
@@ -196,7 +197,6 @@ app.get('/posts', (req, res) => {
         
         {
             res.type('json').send(JSON.stringify(timeList, null, 2) + '\n');
-
         }  
     }
     else 
