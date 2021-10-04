@@ -23,7 +23,6 @@ var storage = cloudinaryStorage({
 var parser = multer({storage: storage})
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
-
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     const result = loginAndRegisterInfoValidator(req.body)
     if (result == true){
@@ -33,9 +32,6 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
         res.sendStatus(400)
     }
 }
-
-
-
 const userDB = []
 const allPosts = []
 const jwtSecretKey = "secretKey123"
@@ -81,7 +77,6 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     res.sendStatus(201) 
 })
 app.post('/posts', parser.array('photos', 4), function (req, res, next) {
-app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
@@ -114,7 +109,7 @@ const newPost = {
     picUrls : myList
     }
 allPosts.push(newPost)
-res.send(req.body)
+res.send(200)
 }
 )
 var opts = {
@@ -175,7 +170,7 @@ app.get('/posts', (req, res) => {
             res.sendStatus(404)
         } 
         else
-        
+
         {
             res.type('json').send(JSON.stringify(categoryList, null, 2) + '\n');
         }  
@@ -194,9 +189,10 @@ app.get('/posts', (req, res) => {
             res.sendStatus(404)
         } 
         else
-        
+
         {
             res.type('json').send(JSON.stringify(timeList, null, 2) + '\n');
+
         }  
     }
     else 
