@@ -174,7 +174,7 @@ try {
     for (let i = 0; i < 4; i ++)
     {
         try {
-            myList.push(req.files[i].path)
+            myList.push(req.files[i].url)
         }
         catch (error) {
 
@@ -196,9 +196,9 @@ const newPost = {
     sellersInfoLastName : req.body.sellersInfoLastName,
     sellersInfoEmail : req.body.sellersInfoEmail,
     sellersInfoPhone : req.body.sellersInfoPhone
+    pics : myList
     }
 allPosts.push(newPost)
-res.send(req.files[0].url)
 
 
 }
