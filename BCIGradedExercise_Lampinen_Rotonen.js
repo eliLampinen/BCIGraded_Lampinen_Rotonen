@@ -211,6 +211,7 @@ const newPost = {
 console.log(newPost)
 console.log(myList)
 allPosts.push(newPost)
+res.send(newPost)
 
 }
 )
