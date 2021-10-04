@@ -170,7 +170,6 @@ app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 console.log(req.file)
 
 try {
-    res.send(req.files.cloudStoragePublicUrl);
     myList = []
     for (let i = 0; i < 4; i ++)
     {
