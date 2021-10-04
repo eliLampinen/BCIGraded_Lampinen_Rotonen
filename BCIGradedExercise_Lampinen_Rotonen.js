@@ -157,7 +157,8 @@ app.get('/posts', (req, res) => {
     else
     
     {
-        res.json(cityList)
+         res.type('json').send(JSON.stringify(cityList, null, 2) + '\n');
+
     }   
     }
     else if (locationQ == undefined && categoryQ != undefined)
