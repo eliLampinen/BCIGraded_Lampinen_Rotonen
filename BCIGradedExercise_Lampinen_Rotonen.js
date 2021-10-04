@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken")
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
 const loginAndRegisterSchema = require("./schemas/loginAndRegisterSchema")
-const postSchema = require("./schemas/postsSchema")
+const postsSchema = require("./schemas/postsSchema")
 const Ajv = require("ajv")
 const ajv = new Ajv()
 var cloudinary = require("cloudinary")
@@ -24,7 +24,7 @@ var storage = cloudinaryStorage({
 var parser = multer({storage: storage})
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
-const postInfoValidator = ajv.compile(postSchema)
+const postInfoValidator = ajv.compile(postsSchema)
 
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     const result = loginAndRegisterInfoValidator(req.body)
