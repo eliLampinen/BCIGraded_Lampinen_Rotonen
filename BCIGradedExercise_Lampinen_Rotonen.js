@@ -196,9 +196,10 @@ const newPost = {
     sellersInfoLastName : req.body.sellersInfoLastName,
     sellersInfoEmail : req.body.sellersInfoEmail,
     sellersInfoPhone : req.body.sellersInfoPhone
-    pics : myList
+    picsPaths : myList
     }
 allPosts.push(newPost)
+res.send(200)
 
 
 }
