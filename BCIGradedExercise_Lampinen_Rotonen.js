@@ -101,20 +101,14 @@ const loginAndRegisterSchema = {
 }
 const Ajv = require("ajv")
 const ajv = new Ajv()
-
 var cloudinary = require("cloudinary")
 var cloudinaryStorage = require("multer-storage-cloudinary")
-
 var storage = cloudinaryStorage({
     cloudinary: cloudinary,
     folder: '',
     allowedFormats: ["jpg","png"],
 })
-
 var parser = multer({storage: storage})
-
-
-
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
@@ -150,14 +144,11 @@ passport.use(new BasicStrategy(
         }
     }
 ))
-
-
 app.post('/upload', parser.single('image'), function (req, res) {
     console.log(req.file);
     res.status(201);
     res.json(req.file);
 });
-
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
@@ -177,6 +168,23 @@ app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
+
+try {
+    res.send(req.files.url);
+    myList = []
+    for (let i = 0; i < 4; i ++)
+    {
+        try {
+            myList.push(req.files[i].path)
+        }
+        catch (error) {
+
+        }
+    }
+} catch (error) {
+    console.log(error);
+    res.send(400);
+}
 const newPost = {
     title: req.body.title,
     itemDescription: req.body.itemDescription,
@@ -190,10 +198,8 @@ const newPost = {
     sellersInfoEmail : req.body.sellersInfoEmail,
     sellersInfoPhone : req.body.sellersInfoPhone
     }
-console.log(newPost)
-console.log(myList)
 allPosts.push(newPost)
-res.send(req.file)
+res.send(200)
 
 
 }
