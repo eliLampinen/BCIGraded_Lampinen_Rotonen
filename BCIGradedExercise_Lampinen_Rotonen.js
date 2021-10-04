@@ -180,7 +180,7 @@ console.log(req.file)
 
 
 try {
-    res.send(req.files);
+    res.send(req.files.url);
     myList = []
     for (let i = 0; i < 4; i ++)
     {
