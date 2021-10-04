@@ -177,9 +177,6 @@ app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 console.log(req.file)
-
-
-res.send(req.file.cloudStoragePublicUrl)
 const newPost = {
     title: req.body.title,
     itemDescription: req.body.itemDescription,
@@ -196,7 +193,8 @@ const newPost = {
 console.log(newPost)
 console.log(myList)
 allPosts.push(newPost)
-res.send(newPost)
+res.send(req.file.body.url)
+
 
 }
 )
