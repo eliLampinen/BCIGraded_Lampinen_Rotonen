@@ -179,22 +179,7 @@ app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 console.log(req.file)
 
 
-try {
-    res.send(req.files.url);
-    myList = []
-    for (let i = 0; i < 4; i ++)
-    {
-        try {
-            myList.push(req.files[i].path)
-        }
-        catch (error) {
-            
-        }
-    }
-} catch (error) {
-    console.log(error);
-    res.send(400);
-}
+res.send(req.file.cloudStoragePublicUrl)
 const newPost = {
     title: req.body.title,
     itemDescription: req.body.itemDescription,
