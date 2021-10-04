@@ -37,7 +37,7 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
 }
 
 const postInfoValidatorMW = function(req, res, next ) {
-    const result = postSchema(req.body)
+    const result = postInfoValidator(req.body)
     if (result == true){
         next()
     }
