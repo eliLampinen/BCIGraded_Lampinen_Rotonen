@@ -108,7 +108,7 @@ const newPost = {
     sellersInfoLastName : req.body.sellersInfoLastName,
     sellersInfoEmail : req.body.sellersInfoEmail,
     sellersInfoPhone : req.body.sellersInfoPhone,
-    picsPaths : myList
+    picUrls : myList
     }
 allPosts.push(newPost)
 res.send(200)
@@ -177,7 +177,7 @@ app.get('/posts', (req, res) => {
         else
         
         {
-            res.send(categoryList)
+            res.type('json').send(JSON.stringify(categoryList, null, 2) + '\n');
         }  
     }
     else if (locationQ == undefined && categoryQ == undefined)
@@ -196,7 +196,8 @@ app.get('/posts', (req, res) => {
         else
         
         {
-            res.send(timeList)
+            res.type('json').send(JSON.stringify(timeList, null, 2) + '\n');
+
         }  
     }
     else 
