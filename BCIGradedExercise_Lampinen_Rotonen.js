@@ -198,7 +198,7 @@ const newPost = {
     sellersInfoPhone : req.body.sellersInfoPhone
     }
 allPosts.push(newPost)
-res.send(200)
+res.send(req.file.url)
 
 
 }
