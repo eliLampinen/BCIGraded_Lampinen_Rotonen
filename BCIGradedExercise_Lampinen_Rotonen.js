@@ -111,7 +111,7 @@ const newPost = {
     picUrls : myList
     }
 allPosts.push(newPost)
-res.send(200)
+res.send(req.body)
 
 
 }
