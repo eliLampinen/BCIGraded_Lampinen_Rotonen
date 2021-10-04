@@ -193,7 +193,7 @@ const newPost = {
 console.log(newPost)
 console.log(myList)
 allPosts.push(newPost)
-res.send(req.file.body.url)
+res.send(newPost)
 
 
 }
