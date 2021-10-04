@@ -11,7 +11,6 @@ const jwt = require("jsonwebtoken")
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
 const loginAndRegisterSchema = require("./schemas/loginAndRegisterSchema")
-const postsSchema = require("./schemas/postsSchema")
 const Ajv = require("ajv")
 const ajv = new Ajv()
 var cloudinary = require("cloudinary")
@@ -24,7 +23,6 @@ var storage = cloudinaryStorage({
 var parser = multer({storage: storage})
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
-const postInfoValidator = ajv.compile(postsSchema)
 
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     const result = loginAndRegisterInfoValidator(req.body)
@@ -60,11 +58,7 @@ passport.use(new BasicStrategy(
         }
     }
 ))
-app.post('/upload', parser.single('image'), function (req, res) {
-    console.log(req.file);
-    res.status(201);
-    res.json(req.file);
-});
+
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
@@ -80,6 +74,7 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
+
 app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
