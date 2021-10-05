@@ -61,11 +61,11 @@ passport.use(new BasicStrategy(
         }
     }
 ))
-app.post('/upload', parser.single('image'), function (req, res) {
-    console.log(req.file);
-    res.status(201);
-    res.json(req.file);
-});
+
+app.get("/", (req, res) => {
+    res.send("Nothing here. Please visit https://bci-lampinen-rotonen.herokuapp.com/posts or HTML document at https://eliaslampinen.stoplight.io/docs/bcigradedexercise-lampinen-rotonen/YXBpOjIxMjM4Mjgy-bci-graded-exercise-lampinen-rotonen-api")
+})
+
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
@@ -132,9 +132,7 @@ app.post('/login', loginAndRegisterInfoValidatorMW,  passport.authenticate('basi
 passport.use(new JwtStrategy(opts, (payload, done) => {
     done(null, {})
 }))
-app.get("/jwtprotectedresource", passport.authenticate('jwt', {session: false}), (req, res) => {
-    res.send("INSIDE JWT PROTECTED")
-})
+
 app.get('/posts', (req, res) => {
     cityList = []
     categoryList = []
@@ -250,7 +248,7 @@ app.get('/posts', (req, res) => {
     
     else if (a == 0)
     {
-        res.send("Choose right parameters")
+        res.send("Only one query parameter allowed at this endpoint")
     }
 
 
