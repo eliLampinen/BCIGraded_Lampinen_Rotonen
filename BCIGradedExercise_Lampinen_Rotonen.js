@@ -253,8 +253,16 @@ app.get('/posts', (req, res) => {
 
 
     else 
-    {
+    {   
+        if (allPosts.length == 0)
+        {
+        res.sendStatus(404)
+        } 
+        else
+        {
         res.type('json').send(JSON.stringify(allPosts, null, 2) + '\n');
+        }
+
     }
 
   })
