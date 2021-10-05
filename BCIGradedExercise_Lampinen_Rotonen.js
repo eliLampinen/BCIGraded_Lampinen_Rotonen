@@ -67,7 +67,7 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
         if (i.userName == req.body.userName)
         {   
             taken = true
-            req.sendStatus(409)
+            res.sendStatus(409)
         }
     
     if (taken == false)
