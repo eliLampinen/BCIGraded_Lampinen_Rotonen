@@ -286,7 +286,7 @@ app.put("/posts", passport.authenticate('basic', {session: false}), upload.array
         for (let i = 0; i < 4; i ++)
         {
             try {
-                myList.push(req.files[i].path)
+                myList.push(req.files[i].url)
             }
             catch (error) {
                 
