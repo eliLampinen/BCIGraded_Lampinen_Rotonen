@@ -78,7 +78,7 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
-app.post('/posts', parser.array('photos', 4), function (req, res, next) {
+app.post('/posts', passport.authenticate('basic', {session: false}), parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 var todayDate = new Date().toISOString().slice(0, 10);
@@ -99,6 +99,7 @@ try {
     res.send(400);
 }
 const newPost = {
+    userName: req.user.userName
     title: req.body.title,
     itemDescription: req.body.itemDescription,
     category: req.body.category,
@@ -125,7 +126,7 @@ app.post('/login',  passport.authenticate('basic', {session: false}), (req, res)
 })
 
 
-app.get('/posts', passport.authenticate('basic', {session: false}), (req, res) => {
+app.get('/posts', (req, res) => {
     cityList = []
     categoryList = []
     timeList = []
@@ -267,9 +268,16 @@ app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res
     allPosts.forEach(function(i){
         if (i.postID == idQ)
         {   
+            if (i.userName == req.user.userName)
+            {
             found = true
             allPosts.splice(i,1)
             res.sendStatus(200)
+            }
+            else
+            {
+                res.sendStatus(401)
+            }
         }
         });
 
