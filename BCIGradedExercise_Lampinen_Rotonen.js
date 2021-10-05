@@ -162,6 +162,9 @@ app.get('/posts', (req, res) => {
     else if (categoryQ == undefined && timeQ == undefined && idQ != undefined && locationQ == undefined){
         a = 4
     }
+    else if (categoryQ == undefined && timeQ == undefined && idQ == undefined && locationQ == undefined){
+        a = 5
+    }
 
     else {
         a = 0
@@ -243,6 +246,11 @@ app.get('/posts', (req, res) => {
         if (foundOrNot == false ){
             res.sendStatus(404)
         } 
+    }
+    
+    else if (a == 5)
+    {
+        res.send("Choose right parameters")
     }
 
 
