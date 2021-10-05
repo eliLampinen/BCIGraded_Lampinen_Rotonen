@@ -78,7 +78,11 @@ app.post('/posts', passport.authenticate('basic', {session: false}), parser.arra
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 var todayDate = new Date().toISOString().slice(0, 10);
-console.log(req.file)
+if (req.body.title == undefined && req.body.category == undefined && req.body.askingPrice == undefined)
+{
+    res.sendStatus(400)
+}
+
 try {
     myList = []
     for (let i = 0; i < 4; i ++)
