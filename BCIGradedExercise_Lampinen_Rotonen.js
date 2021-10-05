@@ -63,12 +63,14 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
     var taken = false
+    
     userDB.forEach(function(i){
         if (i.userName == req.body.userName)
         {   
             taken = true
             res.sendStatus(409)
         }
+    }
     
     if (taken == false)
     {
