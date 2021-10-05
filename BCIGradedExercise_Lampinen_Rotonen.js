@@ -62,17 +62,28 @@ app.get("/", (req, res) => {
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
-    const newUser = {
-        userName : req.body.userName,
-        passWord : hashedPassword, // DO NOT EVER STORE PASSWORD TO THE SYSTEM IN PLAIN TEXT
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        birthDate : req.body.birthDate,
-        email : req.body.email
+    var taken = false
+    userDB.forEach(function(i){
+        if (i.userName == req.body.userName)
+        {   
+            taken = true
+            req.sendStatus(409)
+        }
+    
+    if (taken == false)
+    {
+        const newUser = {
+            userName : req.body.userName,
+            passWord : hashedPassword, // DO NOT EVER STORE PASSWORD TO THE SYSTEM IN PLAIN TEXT
+            firstName : req.body.firstName,
+            lastName : req.body.lastName,
+            birthDate : req.body.birthDate,
+            email : req.body.email
+        }
+            console.log(newUser)
+            userDB.push(newUser)
+            res.sendStatus(201) 
     }
-    console.log(newUser)
-    userDB.push(newUser)
-    res.sendStatus(201) 
 })
 app.post('/posts', passport.authenticate('basic', {session: false}), parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
