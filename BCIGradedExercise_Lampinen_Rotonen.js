@@ -248,7 +248,7 @@ app.get('/posts', (req, res) => {
         } 
     }
     
-    else if (a == 5)
+    else if (a == 0)
     {
         res.send("Choose right parameters")
     }
