@@ -298,6 +298,7 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
             if (i.userName == req.user.userName)
             {
                 found = true     
+                i.userName = i.userName,
                 i.title =  req.body.title
                 i.itemDescription = req.body.itemDescription
                 i.category = req.body.category
@@ -312,6 +313,7 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
                 i.picUrls = myList
                 i.postID = i.postID              
                 res.sendStatus(201)
+                
             }
             else 
             {
