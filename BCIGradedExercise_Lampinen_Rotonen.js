@@ -277,7 +277,7 @@ app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res
     }    
 })
 
-app.put("/posts", passport.authenticate('basic', {session: false}), upload.array('photos', 4), (req, res) => {
+app.put("/posts", passport.authenticate('basic', {session: false}), parse.array('photos', 4), (req, res) => {
     let idQ = req.query.postID
     var found = false
     
