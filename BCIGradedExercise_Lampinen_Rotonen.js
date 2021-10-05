@@ -81,6 +81,8 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
 app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
+var todayDate = new Date().toISOString().slice(0, 10);
+
 console.log(req.file)
 try {
     myList = []
@@ -102,7 +104,7 @@ const newPost = {
     category: req.body.category,
     location: req.body.location,
     askingPrice: req.body.askingPrice,
-    dateOfPosting: req.body.dateOfPosting,
+    dateOfPosting: todayDate,
     deliveryType: req.body.deliveryType,
     sellersInfoFirstName : req.body.sellersInfoFirstName,
     sellersInfoLastName : req.body.sellersInfoLastName,
@@ -119,11 +121,11 @@ res.send(newPost);
 )
 
 app.post('/login',  passport.authenticate('basic', {session: false}), (req, res) => {
-    res.sendStatus(201)
+    res.sendStatus(200)
 })
 
 
-app.get('/posts', (req, res) => {
+app.get('/posts', passport.authenticate('basic', {session: false}), (req, res) => {
     cityList = []
     categoryList = []
     timeList = []
@@ -280,6 +282,8 @@ app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res
 app.put("/posts", passport.authenticate('basic', {session: false}), parser.array('photos', 4), (req, res) => {
     let idQ = req.query.postID
     var found = false
+    var todayDate = new Date().toISOString().slice(0, 10);
+
     
     try {
         myList = []
@@ -306,7 +310,7 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
             i.category = req.body.category
             i.location = req.body.location
             i.askingPrice = req.body.askingPrice
-            i.dateOfPosting = req.body.dateOfPosting
+            i.dateOfPosting = todayDate
             i.deliveryType = req.body.deliveryType
             i.sellersInfoFirstName = req.body.sellersInfoFirstName
             i.sellersInfoLastName = req.body.sellersInfoLastName
