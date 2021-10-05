@@ -118,7 +118,7 @@ app.post('/login',  passport.authenticate('basic', {session: false}), (req, res)
 })
 
 
-app.get('/posts', passport.authenticate('basic', {session: false}), (req, res) => {
+app.get('/posts', (req, res) => {
     cityList = []
     categoryList = []
     timeList = []
