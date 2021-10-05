@@ -301,9 +301,8 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
                 i.sellersInfoEmail = req.body.sellersInfoEmail
                 i.sellersInfoPhone = req.body.sellersInfoPhone
                 i.picUrls = myList
-                i.postID = i.postID
-                
-                res.sendStatus(200)
+                i.postID = i.postID              
+                res.send(req.user.userName)
             }
             else
             {
@@ -311,6 +310,7 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
             }
         
         }
+        
         });
     if (found == false)
     {
