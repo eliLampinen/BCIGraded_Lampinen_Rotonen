@@ -139,17 +139,41 @@ app.get('/posts', (req, res) => {
     let locationQ = req.query.location
     let categoryQ = req.query.category
     let timeQ = req.query.dateOfPosting
-    console.log("ASDASD" + timeQ)
-    console.log(locationQ)
-    console.log(categoryQ)
-    if (categoryQ == undefined && locationQ != undefined)
+    let idQ = req.query.postID
+    var a = 0
+    var foundOrNot = false
+
+    if (categoryQ == undefined && timeQ == undefined && idQ == undefined && locationQ != undefined){
+        a = 1
+    }
+
+    else if (categoryQ != undefined && timeQ == undefined && idQ == undefined && locationQ == undefined){
+        a = 2
+    }
+      
+    else if (categoryQ == undefined && timeQ != undefined && idQ == undefined && locationQ == undefined){
+        a = 3
+    }
+
+    else if (categoryQ == undefined && timeQ == undefined && idQ != undefined && locationQ == undefined){
+        a = 4
+    }
+
+    else {
+        a = 0
+    }
+
+
+    if (a == 1)
     {
+
     allPosts.forEach(function(i){
         if (i.location == locationQ)
         {
             cityList.push(i)
         }
       });
+
     if (cityList.length == 0)
     {
         res.sendStatus(404)
@@ -157,10 +181,12 @@ app.get('/posts', (req, res) => {
     else
     
     {
-         res.type('json').send(JSON.stringify(cityList, null, 2) + '\n');
+        res.type('json').send(JSON.stringify(cityList, null, 2) + '\n');
     }   
     }
-    else if (locationQ == undefined && categoryQ != undefined)
+
+
+    else if (a == 2)
     {
         allPosts.forEach(function(i){
             if (i.category == categoryQ)
@@ -174,12 +200,13 @@ app.get('/posts', (req, res) => {
             res.sendStatus(404)
         } 
         else
-
+        
         {
             res.type('json').send(JSON.stringify(categoryList, null, 2) + '\n');
         }  
     }
-    else if (locationQ == undefined && categoryQ == undefined)
+
+    else if (a == 3)
     {
         allPosts.forEach(function(i){
             if (i.dateOfPosting == timeQ)
@@ -193,17 +220,35 @@ app.get('/posts', (req, res) => {
             res.sendStatus(404)
         } 
         else
-
+        
         {
             res.type('json').send(JSON.stringify(timeList, null, 2) + '\n');
-
         }  
     }
+
+    else if (a == 4)
+    {
+        allPosts.forEach(function(i){
+            if (i.postID == idQ)
+            {   
+                foundOrNot = true
+                res.type('json').send(JSON.stringify(i, null, 2) + '\n');
+            }
+          });
+    
+        if (foundOrNot == false ){
+            res.sendStatus(404)
+        } 
+    }
+
+
     else 
     {
-        res.sendStatus(400)
+        res.type('json').send(JSON.stringify(allPosts, null, 2) + '\n');
     }
+
   })
+
 app.listen(app.get('port'), function() {
     console.log('Example app listening at http://localhost')
   })
