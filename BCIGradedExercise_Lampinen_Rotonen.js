@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken")
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
 const loginAndRegisterSchema = require("./schemas/loginAndRegisterSchema")
+const { uuid } = require('uuidv4');
 
 const Ajv = require("ajv")
 const ajv = new Ajv()
@@ -110,7 +111,9 @@ const newPost = {
     sellersInfoLastName : req.body.sellersInfoLastName,
     sellersInfoEmail : req.body.sellersInfoEmail,
     sellersInfoPhone : req.body.sellersInfoPhone,
-    picUrls : myList
+    picUrls : myList,
+    postID : uuid()
+
     }
 allPosts.push(newPost)
 res.send(200)
