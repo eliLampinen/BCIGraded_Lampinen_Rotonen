@@ -77,9 +77,11 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
 app.post('/posts', passport.authenticate('basic', {session: false}), parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
+var paramsOkOrNot = true
 var todayDate = new Date().toISOString().slice(0, 10);
 if (req.body.title == undefined || req.body.category == undefined || req.body.askingPrice == undefined)
 {
+    paramsOkOrNot = false
     res.sendStatus(400)
 }
 
@@ -113,7 +115,10 @@ const newPost = {
     picUrls : myList,
     postID : uuid()
     }
-allPosts.push(newPost)
+if (paramsOkOrNot == true)
+{
+    allPosts.push(newPost)
+}
 res.send(newPost);
 }
 )
