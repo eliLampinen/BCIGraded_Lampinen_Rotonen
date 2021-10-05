@@ -70,7 +70,7 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
             taken = true
             res.sendStatus(409)
         }
-    }
+    });
     
     if (taken == false)
     {
