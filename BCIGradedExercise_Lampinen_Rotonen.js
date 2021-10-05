@@ -243,9 +243,16 @@ app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res
         if (i.postID == idQ)
         {   
            
-            found = true
-            allPosts.splice(i,1)
-            res.sendStatus(200)
+            if (i.userName == req.user.userName)
+            {
+                found = true
+                allPosts.splice(i,1)
+                res.sendStatus(200)
+            }
+            else
+            {
+                res.sendStatus(401)
+            }
            
         }
         });
