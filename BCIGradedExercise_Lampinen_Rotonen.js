@@ -74,7 +74,6 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
-app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 app.post('/posts', passport.authenticate('basic', {session: false}), parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
@@ -95,6 +94,7 @@ try {
     res.send(400);
 }
 const newPost = {
+    userName: req.user.userName,
     title: req.body.title,
     itemDescription: req.body.itemDescription,
     category: req.body.category,
@@ -119,7 +119,6 @@ app.post('/login',  passport.authenticate('basic', {session: false}), (req, res)
 
 
 app.get('/posts', passport.authenticate('basic', {session: false}), (req, res) => {
-app.get('/posts', (req, res) => {
     cityList = []
     categoryList = []
     timeList = []
