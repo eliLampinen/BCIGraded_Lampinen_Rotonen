@@ -286,22 +286,30 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
     allPosts.forEach(function(i){
         if (i.postID == idQ)
         {   
-            found = true     
-            i.title =  req.body.title
-            i.itemDescription = req.body.itemDescription
-            i.category = req.body.category
-            i.location = req.body.location
-            i.askingPrice = req.body.askingPrice
-            i.dateOfPosting = todayDate
-            i.deliveryType = req.body.deliveryType
-            i.sellersInfoFirstName = req.body.sellersInfoFirstName
-            i.sellersInfoLastName = req.body.sellersInfoLastName
-            i.sellersInfoEmail = req.body.sellersInfoEmail
-            i.sellersInfoPhone = req.body.sellersInfoPhone
-            i.picUrls = myList
-            i.postID = i.postID
+            if (i.userName == req.user.userName)
+            {
+                found = true     
+                i.title =  req.body.title
+                i.itemDescription = req.body.itemDescription
+                i.category = req.body.category
+                i.location = req.body.location
+                i.askingPrice = req.body.askingPrice
+                i.dateOfPosting = todayDate
+                i.deliveryType = req.body.deliveryType
+                i.sellersInfoFirstName = req.body.sellersInfoFirstName
+                i.sellersInfoLastName = req.body.sellersInfoLastName
+                i.sellersInfoEmail = req.body.sellersInfoEmail
+                i.sellersInfoPhone = req.body.sellersInfoPhone
+                i.picUrls = myList
+                i.postID = i.postID
                 
-            res.sendStatus(200)
+                res.sendStatus(200)
+            }
+            else
+            {
+                res.sendStatus(401)
+            }
+        
         }
         });
     if (found == false)
