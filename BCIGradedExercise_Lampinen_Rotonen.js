@@ -116,7 +116,8 @@ const newPost = {
 
     }
 allPosts.push(newPost)
-res.send(200)
+res.send(newPost);
+
 }
 )
 var opts = {
