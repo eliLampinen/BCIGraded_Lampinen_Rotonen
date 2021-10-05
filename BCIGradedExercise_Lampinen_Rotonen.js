@@ -257,6 +257,74 @@ app.get('/posts', (req, res) => {
 
   })
 
+app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res) => {
+    let idQ = req.query.postID
+    var found = false
+    
+
+    allPosts.forEach(function(i){
+        if (i.postID == idQ)
+        {   
+            found = true
+            allPosts.splice(i,1)
+            res.sendStatus(200)
+        }
+        });
+
+    if (found == false)
+    {
+        res.sendStatus(404)
+    }    
+})
+
+app.put("/posts", passport.authenticate('basic', {session: false}), upload.array('photos', 4), (req, res) => {
+    let idQ = req.query.postID
+    var found = false
+    
+    try {
+        myList = []
+        for (let i = 0; i < 4; i ++)
+        {
+            try {
+                myList.push(req.files[i].path)
+            }
+            catch (error) {
+                
+            }
+        }
+    
+    
+    } catch (error) {
+        console.log(error);
+    }
+    allPosts.forEach(function(i){
+        if (i.postID == idQ)
+        {   
+            found = true     
+            i.title =  req.body.title
+            i.itemDescription = req.body.itemDescription
+            i.category = req.body.category
+            i.location = req.body.location
+            i.askingPrice = req.body.askingPrice
+            i.dateOfPosting = req.body.dateOfPosting
+            i.deliveryType = req.body.deliveryType
+            i.sellersInfoFirstName = req.body.sellersInfoFirstName
+            i.sellersInfoLastName = req.body.sellersInfoLastName
+            i.sellersInfoEmail = req.body.sellersInfoEmail
+            i.sellersInfoPhone = req.body.sellersInfoPhone
+            i.pathPics = myList
+            i.postID = i.postID
+                
+            res.sendStatus(200)
+        }
+        });
+
+    if (found == false)
+    {
+        res.sendStatus(404)
+    }    
+})
+
 app.listen(app.get('port'), function() {
     console.log('Example app listening at http://localhost')
   })
