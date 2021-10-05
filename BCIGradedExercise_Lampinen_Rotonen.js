@@ -12,7 +12,6 @@ const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
 const loginAndRegisterSchema = require("./schemas/loginAndRegisterSchema")
 const { uuid } = require('uuidv4');
-
 const Ajv = require("ajv")
 const ajv = new Ajv()
 var cloudinary = require("cloudinary")
@@ -35,11 +34,9 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
         res.sendStatus(400)
     }
 }
-
-
 const userDB = []
 const allPosts = []
-const jwtSecretKey = "secretKey123"
+
 app.set('port', (process.env.PORT || 80));  
 passport.use(new BasicStrategy(
     (userName, passWord, done) => {
@@ -120,18 +117,11 @@ res.send(newPost);
 
 }
 )
-var opts = {
-    jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey : jwtSecretKey
-}
-app.post('/login', loginAndRegisterInfoValidatorMW,  passport.authenticate('basic', {session: false}), (req, res) => {
-    const token = jwt.sign({foo: "bar"}, jwtSecretKey)
-    res.json({token: token})
-    
+
+app.post('/login',  passport.authenticate('basic', {session: false}), (req, res) => {
+    res.sendStatus(201)
 })
-passport.use(new JwtStrategy(opts, (payload, done) => {
-    done(null, {})
-}))
+
 
 app.get('/posts', (req, res) => {
     cityList = []
