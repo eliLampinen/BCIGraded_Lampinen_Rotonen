@@ -1,0 +1,201 @@
+const chai = require("chai")
+const expect = chai.expect
+const chaiHttp = require("chai-http")
+chai.use(chaiHttp)
+const server = require('../startServer')
+const addr = "http://localhost:3000"
+
+describe("tori API Tests", function(){
+
+    before(function(){
+        server.start
+    })
+
+    after(function(){
+        server.close
+    })
+
+
+    describe('GET /testi', function(){
+        it('testi endpoint', function(done){ 
+            chai.request(addr)
+            .get('/testi')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
+        })
+
+     
+    })
+
+    describe('Post /register and post /login at the same time', function(){
+        
+        it('Should register new account to the system and give status 201', function(done){ 
+            chai.request(addr)
+            .post('/register')
+            .send({
+                userName : "asd",
+                passWord : "123",
+                firstName : "pekka",
+                lastName : "ollila",
+                birthDate : "12-03-1961",
+                email : "olliOllila@gmail.com"
+            })
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(201)
+                done()
+            })
+        })
+
+        it('Try to register new account with missing info. Should respond with code 400', function(done){ 
+            chai.request(addr)
+            .post('/register')
+            .send({
+                userName : "asd",
+                passWord : "123",
+                firstName : "pekka"
+                
+            })
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(400)
+                done()
+            })
+        })
+
+        it('Should login with the account we just made using http basic and give status 201', function(done){ 
+            chai.request(addr)
+            .post('/login')
+            .auth('asd', '123')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(201)
+                done()
+            })
+        })
+
+        it('Should fail because we give invalid credentials. "Unauthorized" should be responded ', function(done){ 
+            chai.request(addr)
+            .post('/login')
+            .auth('sadgfdsgff', '123412asdg')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(401)
+                done()
+            })
+        })
+     
+    })
+
+     describe('POST and GET /posts endpoint', function(){
+        it('Send post with valid info. Should return status 200', function(done){ 
+            chai.request(addr)
+            .post('/posts')
+            .send({
+                title : "123",
+                itemDescription : "pekka",
+                category : "Ajoneuvot",
+                location : "Kempele",
+                askingPrice : "123123123",
+                dateOfPosting : "12-03-1961",
+                deliveryType : "Nouto",
+                sellersInfoFirstName : "Pekka",
+                sellersInfoLastName : "Paavola",
+                sellersInfoEmail : "Pekkapaavola@gmail.com",
+                sellersInfoPhone : "04412312512"
+                
+            })
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
+        })
+
+        it('Send post with invalid info. Should return status 400', function(done){ 
+            chai.request(addr)
+            .post('/posts')
+            .send({
+                title : "123",
+                itemDescription : "pekka",
+                category : "Ajoneuvot",
+                location : "Kempele",
+                askingPrice : "123123123",
+                dateOfPosting : "12-03-1961",
+                deliveryType : "Nouto"
+                
+            })
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(400)
+                done()
+            })
+        })
+
+        it('GET /posts with valid location just posted. Should return code 200', function(done){ 
+            chai.request(addr)
+            .get('/posts?location=Kempele')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
+        })
+
+        it('GET /posts with invalid location just posted. Should return code 404', function(done){ 
+            chai.request(addr)
+            .get('/posts?location=Aasia')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(404)
+                done()
+            })
+        })
+
+        it('GET /posts with valid category just posted. Should return code 200', function(done){ 
+            chai.request(addr)
+            .get('/posts?category=Ajoneuvot')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
+        })
+
+        it('GET /posts with invalid category just posted. Should return code 404', function(done){ 
+            chai.request(addr)
+            .get('/posts?category=Nudes')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(404)
+                done()
+            })
+        })
+
+        it('GET /posts with valid date just posted. Should return code 200', function(done){ 
+            chai.request(addr)
+            .get('/posts?dateOfPosting=12-03-1961')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
+        })
+
+        it('GET /posts with invalid date just posted. Should return code 404', function(done){ 
+            chai.request(addr)
+            .get('/posts?dateOfPosting=19-11-2012')
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(404)
+                done()
+            })
+        })
+    })
+
+
+})
+
