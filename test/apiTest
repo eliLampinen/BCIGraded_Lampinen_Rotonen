@@ -1,9 +1,14 @@
+/* PLEASE NOTE! THIS TEST IS MEANT FOR LOCAL TESTING AND WILL NOT WORK WHEN TESTING AT HEROKU! */
+
 const chai = require("chai")
 const expect = chai.expect
 const chaiHttp = require("chai-http")
 chai.use(chaiHttp)
 const server = require('../startServer')
 const addr = "http://localhost:3000"
+
+var todayDate = new Date().toISOString().slice(0, 10);
+
 
 describe("tori API Tests", function(){
 
@@ -72,7 +77,7 @@ describe("tori API Tests", function(){
             .auth('asd', '123')
             .end(function(err,res){
                 expect(err).to.be.null
-                expect(res).to.have.status(201)
+                expect(res).to.have.status(200)
                 done()
             })
         })
@@ -94,13 +99,13 @@ describe("tori API Tests", function(){
         it('Send post with valid info. Should return status 200', function(done){ 
             chai.request(addr)
             .post('/posts')
+            .auth('asd', '123')
             .send({
                 title : "123",
                 itemDescription : "pekka",
                 category : "Ajoneuvot",
                 location : "Kempele",
                 askingPrice : "123123123",
-                dateOfPosting : "12-03-1961",
                 deliveryType : "Nouto",
                 sellersInfoFirstName : "Pekka",
                 sellersInfoLastName : "Paavola",
@@ -111,6 +116,7 @@ describe("tori API Tests", function(){
             .end(function(err,res){
                 expect(err).to.be.null
                 expect(res).to.have.status(200)
+                id = res.text
                 done()
             })
         })
@@ -121,10 +127,9 @@ describe("tori API Tests", function(){
             .send({
                 title : "123",
                 itemDescription : "pekka",
-                category : "Ajoneuvot",
                 location : "Kempele",
                 askingPrice : "123123123",
-                dateOfPosting : "12-03-1961",
+                dateOfPosting : todayDate,
                 deliveryType : "Nouto"
                 
             })
@@ -177,7 +182,7 @@ describe("tori API Tests", function(){
 
         it('GET /posts with valid date just posted. Should return code 200', function(done){ 
             chai.request(addr)
-            .get('/posts?dateOfPosting=12-03-1961')
+            .get('/posts?dateOfPosting=' + todayDate)
             .end(function(err,res){
                 expect(err).to.be.null
                 expect(res).to.have.status(200)
@@ -194,8 +199,59 @@ describe("tori API Tests", function(){
                 done()
             })
         })
+
+        it('PUT /posts with valid credentials. Should return code 200', function(done){ 
+            chai.request(addr)
+            .put("/posts")
+            .query({postID : id})
+
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
+        }) 
+
+        it('PUT /posts with invalid credentials. Should return code 404', function(done){ 
+            chai.request(addr)
+            .put("/posts")
+            .query({postID : "WRONG ID TO THE POST123"})
+
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(404)
+                done()
+            })
+        }) 
+
+        it('DELETE /posts with valid credentials. Should return code 200', function(done){ 
+            chai.request(addr)
+            .delete("/posts")
+            .query({postID : id})
+
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(200)
+                done()
+            })
+        }) 
+
+        it('DELETE /posts with valid credentials. Should return code 404', function(done){ 
+            chai.request(addr)
+            .delete("/posts")
+            .query({postID : "WRONG ID TO THE POSTASDASDDAS"})
+
+            .end(function(err,res){
+                expect(err).to.be.null
+                expect(res).to.have.status(404)
+                done()
+            })
+        }) 
     })
+
+    
 
 
 })
+
 
