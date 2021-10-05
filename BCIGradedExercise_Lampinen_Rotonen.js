@@ -302,9 +302,9 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
                 i.sellersInfoPhone = req.body.sellersInfoPhone
                 i.picUrls = myList
                 i.postID = i.postID              
-                res.send(i.userName)
+                res.sendStatus(201)
             }
-            else
+            else if (i.userName != req.user.userName)
             {
                 res.sendStatus(401)
             }
