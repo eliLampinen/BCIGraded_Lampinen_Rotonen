@@ -304,9 +304,9 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
                 i.postID = i.postID              
                 res.sendStatus(201)
             }
-            else if (i.userName != req.user.userName)
+            else 
             {
-                res.sendStatus(404)
+                res.sendStatus(401)
             }
         
         }
