@@ -24,7 +24,6 @@ var storage = cloudinaryStorage({
 var parser = multer({storage: storage})
 app.use(bodyParser.json())
 const loginAndRegisterInfoValidator = ajv.compile(loginAndRegisterSchema)
-
 const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     const result = loginAndRegisterInfoValidator(req.body)
     if (result == true){
@@ -36,7 +35,6 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
 }
 const userDB = []
 const allPosts = []
-
 app.set('port', (process.env.PORT || 80));  
 passport.use(new BasicStrategy(
     (userName, passWord, done) => {
@@ -58,11 +56,9 @@ passport.use(new BasicStrategy(
         }
     }
 ))
-
 app.get("/", (req, res) => {
     res.send("Nothing here. Please visit https://bci-lampinen-rotonen.herokuapp.com/posts or HTML document at https://eliaslampinen.stoplight.io/docs/bcigradedexercise-lampinen-rotonen/YXBpOjIxMjM4Mjgy-bci-graded-exercise-lampinen-rotonen-api")
 })
-
 app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     const salt = bcrypt.genSaltSync(6)
     const hashedPassword = bcrypt.hashSync(req.body.passWord, salt)
@@ -78,11 +74,11 @@ app.post('/register', loginAndRegisterInfoValidatorMW, (req, res) => {
     userDB.push(newUser)
     res.sendStatus(201) 
 })
+app.post('/posts', parser.array('photos', 4), function (req, res, next) {
 app.post('/posts', passport.authenticate('basic', {session: false}), parser.array('photos', 4), function (req, res, next) {
 // req.files is array of `photos` files
 // req.body will contain the text fields, if there were any
 var todayDate = new Date().toISOString().slice(0, 10);
-
 console.log(req.file)
 try {
     myList = []
@@ -99,7 +95,7 @@ try {
     res.send(400);
 }
 const newPost = {
-    userName: req.user.userName
+    userName: req.user.userName,
     title: req.body.title,
     itemDescription: req.body.itemDescription,
     category: req.body.category,
@@ -113,19 +109,17 @@ const newPost = {
     sellersInfoPhone : req.body.sellersInfoPhone,
     picUrls : myList,
     postID : uuid()
-
     }
 allPosts.push(newPost)
 res.send(newPost);
-
 }
 )
-
 app.post('/login',  passport.authenticate('basic', {session: false}), (req, res) => {
     res.sendStatus(200)
 })
 
 
+app.get('/posts', passport.authenticate('basic', {session: false}), (req, res) => {
 app.get('/posts', (req, res) => {
     cityList = []
     categoryList = []
@@ -137,11 +131,9 @@ app.get('/posts', (req, res) => {
     let idQ = req.query.postID
     var a = 0
     var foundOrNot = false
-
     if (categoryQ == undefined && timeQ == undefined && idQ == undefined && locationQ != undefined){
         a = 1
     }
-
     else if (categoryQ != undefined && timeQ == undefined && idQ == undefined && locationQ == undefined){
         a = 2
     }
@@ -149,29 +141,23 @@ app.get('/posts', (req, res) => {
     else if (categoryQ == undefined && timeQ != undefined && idQ == undefined && locationQ == undefined){
         a = 3
     }
-
     else if (categoryQ == undefined && timeQ == undefined && idQ != undefined && locationQ == undefined){
         a = 4
     }
     else if (categoryQ == undefined && timeQ == undefined && idQ == undefined && locationQ == undefined){
         a = 5
     }
-
     else {
         a = 0
     }
-
-
     if (a == 1)
     {
-
     allPosts.forEach(function(i){
         if (i.location == locationQ)
         {
             cityList.push(i)
         }
       });
-
     if (cityList.length == 0)
     {
         res.sendStatus(404)
@@ -182,8 +168,6 @@ app.get('/posts', (req, res) => {
         res.type('json').send(JSON.stringify(cityList, null, 2) + '\n');
     }   
     }
-
-
     else if (a == 2)
     {
         allPosts.forEach(function(i){
@@ -203,7 +187,6 @@ app.get('/posts', (req, res) => {
             res.type('json').send(JSON.stringify(categoryList, null, 2) + '\n');
         }  
     }
-
     else if (a == 3)
     {
         allPosts.forEach(function(i){
@@ -223,7 +206,6 @@ app.get('/posts', (req, res) => {
             res.type('json').send(JSON.stringify(timeList, null, 2) + '\n');
         }  
     }
-
     else if (a == 4)
     {
         allPosts.forEach(function(i){
@@ -243,8 +225,6 @@ app.get('/posts', (req, res) => {
     {
         res.send("Only one query parameter allowed at this endpoint")
     }
-
-
     else 
     {   
         if (allPosts.length == 0)
@@ -255,16 +235,12 @@ app.get('/posts', (req, res) => {
         {
         res.type('json').send(JSON.stringify(allPosts, null, 2) + '\n');
         }
-
     }
-
   })
-
 app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res) => {
     let idQ = req.query.postID
     var found = false
     
-
     allPosts.forEach(function(i){
         if (i.postID == idQ)
         {   
@@ -286,12 +262,10 @@ app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res
         res.sendStatus(404)
     }    
 })
-
 app.put("/posts", passport.authenticate('basic', {session: false}), parser.array('photos', 4), (req, res) => {
     let idQ = req.query.postID
     var found = false
     var todayDate = new Date().toISOString().slice(0, 10);
-
     
     try {
         myList = []
@@ -330,13 +304,11 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
             res.sendStatus(200)
         }
         });
-
     if (found == false)
     {
         res.sendStatus(404)
     }    
 })
-
 app.listen(app.get('port'), function() {
     console.log('Example app listening at http://localhost')
   })
