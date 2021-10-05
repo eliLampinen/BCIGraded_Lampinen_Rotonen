@@ -95,7 +95,6 @@ try {
     res.send(400);
 }
 const newPost = {
-    userName: req.user.userName,
     title: req.body.title,
     itemDescription: req.body.itemDescription,
     category: req.body.category,
@@ -244,16 +243,11 @@ app.delete("/posts", passport.authenticate('basic', {session: false}), (req, res
     allPosts.forEach(function(i){
         if (i.postID == idQ)
         {   
-            if (i.userName == req.user.userName)
-            {
+           
             found = true
             allPosts.splice(i,1)
             res.sendStatus(200)
-            }
-            else
-            {
-                res.sendStatus(401)
-            }
+           
         }
         });
 
