@@ -312,7 +312,7 @@ app.put("/posts", passport.authenticate('basic', {session: false}), parser.array
             i.sellersInfoLastName = req.body.sellersInfoLastName
             i.sellersInfoEmail = req.body.sellersInfoEmail
             i.sellersInfoPhone = req.body.sellersInfoPhone
-            i.pathPics = myList
+            i.picUrls = myList
             i.postID = i.postID
                 
             res.sendStatus(200)
