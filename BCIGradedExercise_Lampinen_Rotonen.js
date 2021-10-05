@@ -119,7 +119,7 @@ if (paramsOkOrNot == true)
 {
     allPosts.push(newPost)
 }
-res.send(newPost);
+res.send(newPost.postID);
 }
 )
 app.post('/login',  passport.authenticate('basic', {session: false}), (req, res) => {
