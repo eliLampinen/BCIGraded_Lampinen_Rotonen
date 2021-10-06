@@ -21,20 +21,6 @@ describe("tori API Tests", function(){
     })
 
 
-    describe('GET /testi', function(){
-        it('testi endpoint', function(done){ 
-            chai.request(addr)
-            .get('/testi')
-            .end(function(err,res){
-                expect(err).to.be.null
-                expect(res).to.have.status(200)
-                done()
-            })
-        })
-
-     
-    })
-
     describe('Post /register and post /login at the same time', function(){
         
         it('Should register new account to the system and give status 201', function(done){ 
