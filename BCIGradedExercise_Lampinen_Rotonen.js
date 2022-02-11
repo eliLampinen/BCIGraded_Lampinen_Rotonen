@@ -34,7 +34,7 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     }
 }
 const userDB = []
-const allPosts = [
+const allPosts = [ // few posts already in memory. Planning to add real DB
     {
     userName: "Olli123",
     title: "Pöytäkone 3070 RTX",
@@ -49,6 +49,22 @@ const allPosts = [
     sellersInfoEmail : "olliollila@gmail.com",
     sellersInfoPhone : "044123123123",
     picUrls : ["https://res.cloudinary.com/hfgzemzph/image/upload/v1644563097/juy1a7ejugcf4l1yrdh1.jpg"],
+    postID : uuid()
+    },
+    {
+    userName: "Pekka123",
+    title: "VW Jetta",
+    itemDescription: "Hyväkuntoinen Jetta",
+    category: "Autot",
+    location: "Kempele",
+    askingPrice: "4400",
+    dateOfPosting: 2022-02-11,
+    deliveryType: "Nouto",
+    sellersInfoFirstName : "Pekka",
+    sellersInfoLastName : "Pekkala",
+    sellersInfoEmail : "pekkapekkala@gmail.com",
+    sellersInfoPhone : "050123321123",
+    picUrls : ["https://res.cloudinary.com/hfgzemzph/image/upload/v1644563918/n8lek43oyps3udxzp3zu.jpg"],
     postID : uuid()
     }
     ]
