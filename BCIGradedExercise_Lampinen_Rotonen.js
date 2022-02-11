@@ -34,7 +34,21 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     }
 }
 const userDB = []
-const allPosts = []
+const allPosts = [userName: "Olli123",
+    title: "Pöytäkone 3070 RTX",
+    itemDescription: "Myynnissä pöytäkone. Sisältää RTX 3070 sekä i5-8400",
+    category: "Tietokoneet ja tarvikkeet",
+    location: "Oulu",
+    askingPrice: "950",
+    dateOfPosting: 2022-02-11,
+    deliveryType: "Nouto",
+    sellersInfoFirstName : "Olli",
+    sellersInfoLastName : "Ollila",
+    sellersInfoEmail : "olliollila@gmail.com",
+    sellersInfoPhone : "044123123123",
+    picUrls : ["https://res.cloudinary.com/hfgzemzph/image/upload/v1644563097/juy1a7ejugcf4l1yrdh1.jpg"],
+    postID : "fe22ee8b-b3a3-4c85-bc15-b24a44f28fc8"
+    ]
 app.set('port', (process.env.PORT || 80));  
 passport.use(new BasicStrategy(
     (userName, passWord, done) => {
