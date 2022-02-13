@@ -33,7 +33,16 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
         res.sendStatus(400)
     }
 }
-const userDB = []
+const userDB = [ // "admin", "admin" user ready in memory for testing. Dont worry this is on purpose here
+    {
+        "userName" : "admin",
+        "passWord" : "$2a$06$09QKDz1moyuy58CIP0UVWeY0wmuU8yvDVWSRtJ8XwHQqo5Da8P0SS",
+        "firstName" : "ossi",
+        "lastName" : "ossila",
+        "birthDate" : "12-03-1961",
+        "email" : "ossiOssila@gmail.com"
+    }
+]
 const allPosts = [ // few posts already in memory. Planning to add real DB
     {
     userName: "Olli123",
