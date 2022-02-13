@@ -34,6 +34,7 @@ const loginAndRegisterInfoValidatorMW = function(req, res, next ) {
     }
 }
 const userDB = [ // "admin", "admin" user ready in memory for testing. Dont worry this is on purpose here
+                // Due to nature of the project, we are not using DB
     {
         "userName" : "admin",
         "passWord" : "$2a$06$09QKDz1moyuy58CIP0UVWeY0wmuU8yvDVWSRtJ8XwHQqo5Da8P0SS",
